@@ -1,0 +1,74 @@
+# .github/workflows/daily-simpsons.yml
+#
+# Runs every day at 8am ET, fetches news, picks a Simpsons scene,
+# and deploys to GitHub Pages. Free!
+#
+# Setup:
+#   1. Push your repo with simpsons-daily.html and update_daily.py
+#   2. Go to Settings → Secrets → Actions
+#   3. Add ANTHROPIC_API_KEY (required)
+#   4. Add NEWS_API_KEY (optional, for better headlines)
+#   5. Go to Settings → Pages → Source: GitHub Actions
+#   6. That's it! 🍩
+
+name: Daily Simpsons Update
+
+on:
+  schedule:
+    # 8:00 AM Eastern (13:00 UTC)
+    - cron: '0 13 * * *'
+  workflow_dispatch:  # Allow manual trigger from Actions tab
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests
+
+      - name: Run daily update
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+        run: python update_daily.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "Simpsons Bot"
+          git config user.email "bot@simpsons-did-it.local"
+          git add simpsons-daily.html
+          git diff --cached --quiet || git commit -m "🍩 Daily update: $(date +%Y-%m-%d)"
+          git push
+
+  # Deploy to GitHub Pages
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main  # Get the freshly committed version
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
