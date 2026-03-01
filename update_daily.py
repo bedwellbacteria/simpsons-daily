@@ -117,7 +117,7 @@ def ask_claude(headlines):
     headline_text = "\n".join(f"- {h}" for h in headlines)
 
     message = client.messages.create(
-        model="claude-sonnet-4-5-20250514",
+        model="claude-sonnet-4-5-20250929",
         max_tokens=500,
         messages=[{
             "role": "user",
