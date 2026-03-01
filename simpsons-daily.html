@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Simpsons Did It</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sy: #FFD90F;
+    --sb: #009DDC;
+    --sp: #F14E87;
+    --wood: #a8906e;
+    --wood-dark: #6b5a42;
+    --tv-dark: #3A3226;
+    --bg: #1a1612;
+    --beige: #D4C5A9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Patrick Hand', cursive;
+    padding: 24px 16px;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 40%, rgba(255,217,15,0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 60%, rgba(0,157,220,0.03) 0%, transparent 50%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    color: var(--sy);
+    text-shadow: 3px 3px 0 #c7a800, 6px 6px 0 rgba(0,0,0,0.25);
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    animation: dropIn 0.5s ease-out;
+  }
+  @keyframes dropIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .tagline {
+    font-family: 'Patrick Hand', cursive;
+    color: var(--beige);
+    font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+    margin-bottom: 28px;
+    text-align: center;
+    opacity: 0.6;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ========== TV ========== */
+  .tv {
+    position: relative;
+    z-index: 1;
+    animation: tvPop 0.6s ease-out 0.15s both;
+  }
+  @keyframes tvPop {
+    0% { transform: scale(0.92); opacity: 0; }
+    70% { transform: scale(1.01); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .tv-body {
+    background: linear-gradient(145deg, #c4a882, var(--wood), var(--wood-dark));
+    border-radius: 26px;
+    padding: 24px 28px 16px;
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,0.15),
+      inset 0 -3px 0 rgba(0,0,0,0.15),
+      0 20px 60px rgba(0,0,0,0.5);
+    max-width: 560px;
+    width: 100%;
+    position: relative;
+  }
+  .tv-body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 26px;
+    background: repeating-linear-gradient(95deg, transparent, transparent 3px, rgba(0,0,0,0.025) 3px, rgba(0,0,0,0.025) 4px);
+    pointer-events: none;
+  }
+
+  .bezel {
+    background: #1a1a1a;
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: inset 0 3px 10px rgba(0,0,0,0.6);
+  }
+
+  .screen {
+    background: #0a0a12;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 4/3;
+  }
+  .screen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+    pointer-events: none;
+    z-index: 3;
+    border-radius: 10px;
+  }
+
+  .screen-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+  }
+
+  .img-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #111;
+    position: relative;
+  }
+  .img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .caption-bar {
+    background: var(--sy);
+    padding: 8px 14px;
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700;
+    font-size: clamp(0.72rem, 1.8vw, 0.85rem);
+    color: var(--tv-dark);
+    text-align: center;
+    line-height: 1.35;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 6px 4px;
+  }
+  .knobs { display: flex; gap: 12px; }
+  .knob {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #888, #444);
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  .knob::after {
+    content: ''; position: absolute; top: 4px; left: 50%;
+    transform: translateX(-50%); width: 2px; height: 7px;
+    background: #222; border-radius: 1px;
+  }
+  .date-badge {
+    font-family: 'Courier Prime', monospace;
+    font-weight: 700; font-size: 0.85rem;
+    color: var(--tv-dark);
+    background: rgba(0,0,0,0.08);
+    padding: 3px 10px; border-radius: 4px;
+    letter-spacing: 1px;
+  }
+  .brand {
+    font-family: 'Bangers', cursive;
+    font-size: 0.7rem; color: var(--tv-dark);
+    opacity: 0.45; letter-spacing: 2px;
+  }
+
+  .legs {
+    display: flex; justify-content: center; gap: 180px;
+    margin-top: -2px; position: relative; z-index: 0;
+  }
+  .leg {
+    width: 7px; height: 36px;
+    background: linear-gradient(90deg, #8a7456, var(--wood-dark));
+    border-radius: 0 0 3px 3px;
+  }
+
+  /* ========== NEWS CARD ========== */
+  .news-card {
+    max-width: 560px; width: 100%;
+    margin-top: 26px;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,217,15,0.12);
+    border-radius: 12px;
+    padding: 18px 22px;
+    position: relative; z-index: 1;
+    animation: fadeUp 0.5s ease-out 0.4s both;
+  }
+  @keyframes fadeUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .news-label {
+    font-family: 'Bangers', cursive;
+    color: var(--sy); font-size: 0.95rem;
+    letter-spacing: 2px; margin-bottom: 8px;
+  }
+  .news-label::before { content: '📰 '; }
+
+  .news-headline {
+    color: var(--beige);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .connector {
+    display: flex; align-items: center; gap: 10px; margin: 10px 0;
+  }
+  .connector .line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--sy), transparent);
+    opacity: 0.25;
+  }
+  .connector .tag {
+    font-family: 'Bangers', cursive;
+    color: var(--sp); font-size: 0.8rem;
+    letter-spacing: 1px; white-space: nowrap;
+  }
+
+  .ep-info {
+    color: rgba(255,255,255,0.4);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.78rem; line-height: 1.6;
+  }
+  .ep-info strong { color: var(--sb); }
+
+  /* ========== PIPELINE ========== */
+  .pipeline-section {
+    max-width: 560px; width: 100%;
+    margin-top: 22px;
+    position: relative; z-index: 1;
+    animation: fadeUp 0.5s ease-out 0.6s both;
+  }
+  .pipeline-title {
+    font-family: 'Bangers', cursive;
+    color: var(--sy); font-size: 0.95rem;
+    letter-spacing: 2px; text-align: center;
+    opacity: 0.5; margin-bottom: 12px;
+  }
+  .pipeline {
+    display: flex; align-items: center;
+    justify-content: center; gap: 5px; flex-wrap: wrap;
+  }
+  .step {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px; padding: 9px 13px; text-align: center;
+    color: var(--beige); font-size: 0.82rem;
+  }
+  .step-icon { font-size: 1.2rem; margin-bottom: 3px; }
+  .step-label { font-family: 'Courier Prime', monospace; font-size: 0.65rem; opacity: 0.55; }
+  .arrow { color: var(--sy); opacity: 0.35; font-size: 1.1rem; }
+
+  .footer {
+    margin-top: 36px; text-align: center;
+    position: relative; z-index: 1;
+    animation: fadeUp 0.5s ease-out 0.8s both;
+  }
+  .footer p {
+    color: rgba(255,255,255,0.18);
+    font-family: 'Courier Prime', monospace; font-size: 0.72rem;
+  }
+  .footer a { color: var(--sb); text-decoration: none; }
+
+  .placeholder-screen {
+    text-align: center; padding: 24px;
+    color: var(--sy); font-family: 'Bangers', cursive;
+  }
+  .placeholder-screen .big-icon { font-size: 3.5rem; margin-bottom: 12px; }
+  .placeholder-screen .ep-code { font-size: 1.4rem; letter-spacing: 2px; }
+  .placeholder-screen .ep-name {
+    font-size: 1rem; color: var(--beige);
+    font-family: 'Patrick Hand', cursive; margin-top: 6px;
+  }
+  .placeholder-screen .frinkiac-link {
+    font-size: 0.72rem; color: rgba(255,255,255,0.3);
+    font-family: 'Courier Prime', monospace; margin-top: 14px;
+  }
+  .placeholder-screen .frinkiac-link a {
+    color: var(--sb); text-decoration: none;
+  }
+
+  .loading-msg {
+    color: var(--sy); font-family: 'Bangers', cursive;
+    font-size: 1.1rem; letter-spacing: 2px;
+    animation: pulse 1s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+  }
+
+  @media (max-width: 480px) {
+    .tv-body { padding: 16px 14px 12px; border-radius: 18px; }
+    .legs { gap: 110px; }
+    .step { padding: 7px 9px; font-size: 0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="title">SIMPSONS DID IT</div>
+<div class="tagline">a daily Simpsons moment matched to the news</div>
+
+<div class="tv">
+  <div class="tv-body">
+    <div class="bezel">
+      <div class="screen">
+        <div class="screen-inner">
+          <div class="img-wrap" id="imgWrap">
+            <span class="loading-msg">TUNING IN...</span>
+          </div>
+          <div class="caption-bar" id="caption">Loading today's moment...</div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="knobs"><div class="knob"></div><div class="knob"></div></div>
+      <div class="date-badge" id="dateDisplay"></div>
+      <div class="brand">SPRINGFIELD</div>
+    </div>
+  </div>
+  <div class="legs"><div class="leg"></div><div class="leg"></div></div>
+</div>
+
+<div class="news-card">
+  <div class="news-label">TODAY'S NEWS LINK</div>
+  <div class="news-headline" id="newsHeadline">Loading...</div>
+  <div class="connector">
+    <span class="line"></span>
+    <span class="tag">SIMPSONS DID IT FIRST</span>
+    <span class="line"></span>
+  </div>
+  <div class="ep-info" id="epInfo">Loading episode info...</div>
+</div>
+
+<div class="pipeline-section">
+  <div class="pipeline-title">HOW THIS WORKS</div>
+  <div class="pipeline">
+    <div class="step"><div class="step-icon">📰</div><div class="step-label">News API</div></div>
+    <span class="arrow">→</span>
+    <div class="step"><div class="step-icon">🤖</div><div class="step-label">Claude AI</div></div>
+    <span class="arrow">→</span>
+    <div class="step"><div class="step-icon">🔍</div><div class="step-label">Frinkiac</div></div>
+    <span class="arrow">→</span>
+    <div class="step"><div class="step-icon">📺</div><div class="step-label">Your TV</div></div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Screenshots via <a href="https://frinkiac.com" target="_blank">Frinkiac</a> · Powered by love & Claude</p>
+</div>
+
+<script>
+// ================================================================
+// SIMPSONS DID IT — Daily Engine
+//
+// HOW THE AUTOMATION WORKS:
+// A daily script (cron/GitHub Action) runs update_daily.py which:
+//   1. Fetches top headlines from NewsAPI
+//   2. Sends them to Claude API to pick a Simpsons match
+//   3. Searches Frinkiac for the scene
+//   4. Downloads the screenshot & converts to base64
+//   5. Writes the base64 image + metadata into this HTML file
+//
+// When imageBase64 is set (by the script), the image displays
+// directly with zero external dependencies. No hotlinking needed!
+//
+// When imageBase64 is null (like in this demo), it shows a nice
+// placeholder with a link to view the scene on Frinkiac directly.
+// ================================================================
+
+const DAILY_DATA = {
+  // ===== BEGIN_DAILY_DATA =====
+  date: "2026-03-01",
+  imageBase64: null,
+  frinkiacUrl: "https://frinkiac.com/img/S03E21/242291.jpg",
+  caption: "\"Homer, that shirt is the leader of Iran!\"",
+  episodeTitle: "Colonel Homer",
+  season: 3,
+  episode: 21,
+  newsHeadline: "Iran's Ayatollah Khamenei reported dead — world reacts to the passing of the Supreme Leader at age 85.",
+  connectionNote: "Homer's infamous Ayatollah t-shirt from the closet scene — a deep cut that resurfaces every time Iran is in the headlines. The Simpsons: accidentally topical since 1989."
+  // ===== END_DAILY_DATA =====
+};
+
+function render() {
+  const d = new Date();
+  document.getElementById('dateDisplay').textContent = d.toLocaleDateString('en-US', {
+    weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
+  });
+
+  const wrap = document.getElementById('imgWrap');
+  const s = DAILY_DATA.season;
+  const e = DAILY_DATA.episode;
+  const code = 'S' + String(s).padStart(2,'0') + 'E' + String(e).padStart(2,'0');
+
+  if (DAILY_DATA.imageBase64) {
+    // Best case: image is embedded (what the daily script provides)
+    wrap.innerHTML = '<img src="data:image/jpeg;base64,' + DAILY_DATA.imageBase64 + '" alt="Today\'s Simpsons moment">';
+  } else {
+    // Fallback: show a nice placeholder + link to Frinkiac
+    wrap.innerHTML =
+      '<div class="placeholder-screen">' +
+        '<div class="big-icon">📺</div>' +
+        '<div class="ep-code">' + code + '</div>' +
+        '<div class="ep-name">"' + DAILY_DATA.episodeTitle + '"</div>' +
+        '<div class="frinkiac-link">' +
+          '<a href="' + DAILY_DATA.frinkiacUrl + '" target="_blank">View screenshot on Frinkiac ↗</a>' +
+        '</div>' +
+      '</div>';
+  }
+
+  document.getElementById('caption').textContent = DAILY_DATA.caption;
+  document.getElementById('newsHeadline').textContent = DAILY_DATA.newsHeadline;
+  document.getElementById('epInfo').innerHTML =
+    '<strong>' + DAILY_DATA.episodeTitle + '</strong> · Season ' + s + ', Episode ' + e + '<br>' +
+    DAILY_DATA.connectionNote;
+}
+
+setTimeout(render, 500);
+</script>
+</body>
+</html>
